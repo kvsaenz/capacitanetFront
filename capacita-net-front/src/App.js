@@ -5,6 +5,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import Perfil from './components/Perfil';
+import CrearCurso from './components/CrearCurso';
+import EditarCurso from './components/EditarCurso';
 import './App.css';
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/perfil" element={<Perfil />} />
+            <Route path="/crear-curso" element={<CrearCurso />} />
+            <Route path="/editarCurso/:cursoId" element={<EditarCurso />} />
             <Route path="/" element={<Login />} />
           </Routes>
         </main>

@@ -36,6 +36,9 @@ const Header = () => {
                             <Link to="/dashboard" className="nav-link">
                                 🏠 Dashboard
                             </Link>
+                            <Link to="/crear-curso" className="nav-link">
+                                🎓 Crear Curso
+                            </Link>
                             <Link to="/perfil" className="nav-link">
                                 👤 Perfil
                             </Link>
