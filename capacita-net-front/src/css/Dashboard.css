@@ -603,3 +603,27 @@
     }
 }
 
+.visualized-btn {
+    background: #48bb78;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.visualized-btn:hover {
+    background: #38a169;
+    transform: translateY(-1px);
+}
+
+/* Ajustes para el botón en dispositivos móviles */
+@media (max-width: 768px) {
+    .visualized-btn {
+        padding: 4px 10px;
+        font-size: 0.9rem;
+    }
+}
+

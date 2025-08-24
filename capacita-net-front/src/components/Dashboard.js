@@ -117,6 +117,35 @@ const Dashboard = () => {
         }
     };
 
+    const markAsViewed = async (cursoId, recursoId) => {
+        const token = sessionStorage.getItem('authToken');
+        try {
+            const response = await fetch('http://localhost:9080/capacitanet/ver-modulo', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    cursoId: cursoId,
+                    recursoId: recursoId
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setSuccess(data.message);
+                setTimeout(() => setSuccess(''), 3000);
+            } else {
+                const errorData = await response.json();
+                setError(errorData.message || 'Error al marcar el recurso como visualizado');
+                setTimeout(() => setError(''), 3000);
+            }
+        } catch (err) {
+            setError('Error de conexión. Verifica que el servidor esté funcionando.');
+            setTimeout(() => setError(''), 3000);
+        }
+    };
+
     const clearFilter = () => {
         // Limpiar el parámetro de búsqueda
         window.history.replaceState({}, '', '/dashboard');
@@ -273,6 +302,12 @@ const Dashboard = () => {
                                                 <span className="resource-icon">{getResourceIcon(recurso.tipo)}</span>
                                                 <span className="resource-name">{recurso.nombre}</span>
                                                 <span className="resource-type">{recurso.tipo}</span>
+                                                <button 
+                                                    className="visualized-btn"
+                                                    onClick={() => markAsViewed(curso.cursoId, recurso.id)}
+                                                >
+                                                    Hecho
+                                                </button>
                                             </div>
                                         ))}
                                     </div>
