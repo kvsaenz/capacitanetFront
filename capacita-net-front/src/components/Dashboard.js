@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import '../css/Dashboard.css';
 
 const Dashboard = () => {
     const [cursos, setCursos] = useState([]);
+    const [filteredCursos, setFilteredCursos] = useState([]);
     const [selectedResource, setSelectedResource] = useState(null);
     const [selectedCurso, setSelectedCurso] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [searchParams] = useSearchParams();
+    const [searchTerm, setSearchTerm] = useState('');
+    const cursoId = searchParams.get('cursoId');
 
     useEffect(() => {
         const fetchCursos = async () => {
@@ -26,6 +31,9 @@ const Dashboard = () => {
 
                 const data = await response.json();
                 setCursos(data);
+                
+                // Aplicar filtros iniciales
+                applyFilters(data, cursoId, searchTerm);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -34,7 +42,33 @@ const Dashboard = () => {
         };
 
         fetchCursos();
-    }, []);
+    }, [cursoId]);
+
+    useEffect(() => {
+        // Aplicar filtros cuando cambia el término de búsqueda
+        applyFilters(cursos, cursoId, searchTerm);
+    }, [searchTerm, cursos, cursoId]);
+
+    const applyFilters = (cursosData, cursoIdParam, searchTermParam) => {
+        let filtered = [...cursosData];
+
+        // Primero filtrar por cursoId si existe
+        if (cursoIdParam) {
+            filtered = filtered.filter(curso => curso.cursoId === cursoIdParam);
+        }
+
+        // Luego filtrar por término de búsqueda
+        if (searchTermParam) {
+            const term = searchTermParam.toLowerCase();
+            filtered = filtered.filter(curso => 
+                curso.titulo.toLowerCase().includes(term) ||
+                curso.descripcion.toLowerCase().includes(term) ||
+                curso.tags.some(tag => tag.toLowerCase().includes(term))
+            );
+        }
+
+        setFilteredCursos(filtered);
+    };
 
     const handleResourceClick = (resource, curso) => {
         setSelectedResource(resource);
@@ -58,6 +92,20 @@ const Dashboard = () => {
             if (response.ok) {
                 setSuccess('¡Te has suscrito al curso exitosamente!');
                 setTimeout(() => setSuccess(''), 3000);
+                
+                // Recargar los cursos para actualizar el estado
+                const refreshResponse = await fetch('http://localhost:9080/capacitanet/obtener-cursos', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                
+                if (refreshResponse.ok) {
+                    const data = await refreshResponse.json();
+                    setCursos(data);
+                    applyFilters(data, cursoId, searchTerm);
+                }
             } else {
                 const errorData = await response.json();
                 setError(errorData.message || 'Error al suscribirse al curso');
@@ -67,6 +115,18 @@ const Dashboard = () => {
             setError('Error de conexión. Verifica que el servidor esté funcionando.');
             setTimeout(() => setError(''), 3000);
         }
+    };
+
+    const clearFilter = () => {
+        // Limpiar el parámetro de búsqueda
+        window.history.replaceState({}, '', '/dashboard');
+        setSearchTerm('');
+        applyFilters(cursos, null, '');
+        window.location.reload();
+    };
+
+    const clearSearch = () => {
+        setSearchTerm('');
     };
 
     const getResourceIcon = (tipo) => {
@@ -92,8 +152,15 @@ const Dashboard = () => {
     return (
         <div className="dashboard-container">
             <div className="dashboard-header">
-                <h1 className="dashboard-title">Cursos Disponibles</h1>
+                <h1 className="dashboard-title">
+                    {cursoId ? `Curso Específico` : 'Cursos Disponibles'}
+                </h1>
                 <div className="user-info">
+                    {cursoId && (
+                        <button onClick={clearFilter} className="clear-filter-btn">
+                            ← Ver todos los cursos
+                        </button>
+                    )}
                     <span>Bienvenido</span>
                 </div>
             </div>
@@ -110,11 +177,66 @@ const Dashboard = () => {
                 </div>
             )}
 
+            {/* Barra de búsqueda y filtros */}
+            {!cursoId && (
+                <div className="search-filters">
+                    <div className="search-bar">
+                        <div className="search-input-container">
+                            <input
+                                type="text"
+                                placeholder="🔍 Buscar cursos por título o descripción..."
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="search-input"
+                            />
+                            {searchTerm && (
+                                <button onClick={clearSearch} className="clear-search-btn">
+                                    ✕
+                                </button>
+                            )}
+                        </div>
+                        <div className="search-stats">
+                            {searchTerm && (
+                                <span className="search-results">
+                                    {filteredCursos.length} curso(s) encontrado(s)
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {filteredCursos.length === 0 && !loading && (
+                <div className="no-courses-message">
+                    <p>
+                        {cursoId 
+                            ? `No se encontró el curso`
+                            : searchTerm
+                            ? `No se encontraron cursos que coincidan con "${searchTerm}"`
+                            : 'No hay cursos disponibles'
+                        }
+                    </p>
+                    {searchTerm && (
+                        <button onClick={clearSearch} className="clear-search-btn-large">
+                            Limpiar búsqueda
+                        </button>
+                    )}
+                </div>
+            )}
+
             <div className="dashboard-content">
                 <div className="courses-section">
-                    <h2 className="section-title">Lista de Cursos</h2>
+                    <h2 className="section-title">
+                        {cursoId 
+                            ? 'Curso Filtrado' 
+                            : searchTerm
+                            ? `Resultados de búsqueda${filteredCursos.length > 0 ? `: ${filteredCursos.length} curso(s)` : ''}`
+                            : 'Lista de Cursos'
+                        }
+                        {cursoId && filteredCursos.length > 0 && `: ${filteredCursos[0].titulo}`}
+                    </h2>
                     <div className="courses-grid">
-                        {cursos.map((curso) => (
+                        {filteredCursos.map((curso) => (
                             <div key={curso.cursoId} className="course-card">
                                 <div className="course-header">
                                     <h3 className="course-title">{curso.titulo}</h3>

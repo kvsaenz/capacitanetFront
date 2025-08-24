@@ -394,3 +394,212 @@
         gap: 5px;
     }
 }
+
+.clear-filter-btn {
+    background: #e2e8f0;
+    color: #4a5568;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 15px;
+}
+
+.clear-filter-btn:hover {
+    background: #cbd5e0;
+    transform: translateY(-1px);
+}
+
+.no-courses-message {
+    text-align: center;
+    padding: 40px;
+    background: white;
+    border-radius: 12px;
+    margin: 20px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.no-courses-message p {
+    font-size: 1.1rem;
+    color: #718096;
+    margin: 0;
+}
+
+/* Estilos para el título cuando hay filtro */
+.dashboard-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Responsive design para el botón de limpiar filtro */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .clear-filter-btn {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .clear-filter-btn {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+
+/* Barra de búsqueda y filtros */
+.search-filters {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.search-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 45px 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.clear-search-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #718096;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.clear-search-btn:hover {
+    background: #e2e8f0;
+    color: #4a5568;
+}
+
+.search-stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.search-results {
+    font-size: 0.9rem;
+    color: #718096;
+    font-weight: 500;
+}
+
+.clear-search-btn-large {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.2s ease;
+}
+
+.clear-search-btn-large:hover {
+    background: #5a67d8;
+    transform: translateY(-1px);
+}
+
+/* Ajustes para mensajes cuando no hay cursos */
+.no-courses-message {
+    text-align: center;
+    padding: 40px;
+    background: white;
+    border-radius: 12px;
+    margin: 20px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.no-courses-message p {
+    font-size: 1.1rem;
+    color: #718096;
+    margin: 0 0 15px 0;
+}
+
+/* Responsive design para la barra de búsqueda */
+@media (max-width: 768px) {
+    .search-filters {
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .search-input {
+        padding: 10px 40px 10px 12px;
+        font-size: 14px;
+    }
+    
+    .clear-search-btn {
+        right: 8px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-filters {
+        padding: 12px;
+    }
+    
+    .search-input {
+        padding: 8px 35px 8px 10px;
+        font-size: 13px;
+    }
+    
+    .clear-search-btn {
+        right: 6px;
+    }
+    
+    .search-results {
+        font-size: 0.8rem;
+    }
+    
+    .clear-search-btn-large {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}
+
