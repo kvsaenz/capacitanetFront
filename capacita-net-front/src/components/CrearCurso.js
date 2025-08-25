@@ -124,8 +124,8 @@ const CrearCurso = () => {
                 
                 // Redirigir después de 2 segundos
                 setTimeout(() => {
-                    navigate('/dashboard');
-                }, 2000);
+                    navigate('/crear-curso');
+                }, 1000);
             } else {
                 setError(data.message || 'Error al crear el curso');
             }
