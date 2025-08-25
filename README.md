@@ -97,7 +97,7 @@ El frontend se comunica con el backend en los siguientes endpoints:
 - Marcar módulo: http://localhost:9080/capacitanet/ver-modulo
 
 ## Estructura del proyecto
-
+![Estructura.png](resource/Estructura.png)
 ## Contribución
 ### Guía para contribuir al proyecto
 1. Crear una copia independiente del proyecto.
